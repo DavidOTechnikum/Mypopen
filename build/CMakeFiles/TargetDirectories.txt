@@ -1,2 +1,0 @@
-/home/student/Documents/GitHub/Mypopen/build/CMakeFiles/rebuild_cache.dir
-/home/student/Documents/GitHub/Mypopen/build/CMakeFiles/edit_cache.dir
