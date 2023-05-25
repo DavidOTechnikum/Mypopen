@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/student/Documents/GitHub/Mypopen/build",
+  "command": "/usr/bin/gcc   -g -std=gnu11 -o CMakeFiles/mypopen_test.dir/test/main.c.o -c /home/student/Documents/GitHub/Mypopen/test/main.c",
+  "file": "/home/student/Documents/GitHub/Mypopen/test/main.c"
+},
+{
+  "directory": "/home/student/Documents/GitHub/Mypopen/build",
+  "command": "/usr/bin/gcc   -g -std=gnu11 -o CMakeFiles/mypopen.dir/src/mypopen.c.o -c /home/student/Documents/GitHub/Mypopen/src/mypopen.c",
+  "file": "/home/student/Documents/GitHub/Mypopen/src/mypopen.c"
+}
+]

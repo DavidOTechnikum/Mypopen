@@ -22,19 +22,18 @@
 
 FILE *mypopen(const char *command, const char *type)
 {
+    errno = 0;
     int status;
-    int fd[2];
+    int fd[2];                                                  // file descriptors
 
     if ((pipe(fd)) != 0)
     {
-        perror("pipe");
-        exit;
+        return(NULL);
     }
     pid_t pid = fork();                                         // pipe between parent and child
     if (pid == -1)
     {
-        fprintf(stderr, "fork() unsuccessful");
-        exit;
+        return(NULL);
     }
 
     if (strcmp(type, "r") == 0)
@@ -43,32 +42,26 @@ FILE *mypopen(const char *command, const char *type)
         {
             if ((close(fd[0])) != 0)
             {                                                   // does not need input from parent
-                perror("r: child close fd[0]");
-                exit;
+                return(NULL);
             }
             if ((dup2(fd[1], 1)) == -1)
             {                                                   // 0: stdin, 1: stdout, 2: stderr; child fd[1] (to parent process) replaces stdout
-                perror("r: dup2");
-                exit;
+                return(NULL);
             }
             if ((close(fd[1])) != 0)
             {                                                   // stdout is now file descriptor (pointer) to the pipe output, OG fd[1] is now obsolete, because we copied it
-                perror("r: child close fd[1]");
-                exit;
+                return(NULL);
             }
             if ((execl("/bin/sh", "sh", "-c", command, NULL)) == -1)
             {                                                   // shell creates output for fd[1]
-                perror("r: execl");
-                exit;
+                return(NULL);
             }
-            return 0;
         }
         else                                                    // pid from fork > 0 means parent process
         {
             if ((close(fd[1])) != 0)
             {                                                   // fd[1] output to pipe (to child) is not needed, we expect data from the child
-                perror("r: parent close fd[1]");
-                exit;
+                return(NULL);
             }
             return fdopen(fd[0], "r");                          // data from the child is now passed on (returned) to calling file handle
         }
@@ -79,40 +72,34 @@ FILE *mypopen(const char *command, const char *type)
         {
             if ((close(fd[1])) != 0)
             {                                                   // child does not need pipe output to parent process
-                perror("w: child close fd[1]");
-                exit;
+                return(NULL);
             }
             if ((dup2(fd[0], 0)) == -1)
             {                                                   // we now copy fd[0] to replace stdout
-                perror("w: dup2");
-                exit;
+                return(NULL);
             }
             if ((close(fd[0])) != 0)
             {                                                   // fd[0] copied and OG "pointer" is not needed anymore
-                perror("child close fd[0]");
-                exit;
+                return(NULL);
             }
             if ((execl("/bin/sh", "sh", "-c", command, NULL)) == -1)
             {                                                   // input goes to shell
-                perror("w: execl");
-                exit;
+                return(NULL);
             }
-            return 0;
         }
         else
         {
             if ((close(fd[0])) != 0)                            // parent closes pipe input
             {
-                perror("parent close fd[0]");
-                exit;
+                return(NULL);
             }                                                   
             return fdopen(fd[1], "w");                          // returns pipe output to handle
         }
     }
     else
     {
-        fprintf(stderr, "sh: type '%s' not supported\n", type);
-        exit;
+        errno = EINVAL;
+        return(NULL);
     }
 }
 
@@ -128,11 +115,12 @@ FILE *mypopen(const char *command, const char *type)
 
 int mypclose(FILE *stream)
 {
+    errno = 0;
     int status;
     if ((fclose(stream)) != 0)
     {
-        perror("fclose stream");
-        exit;
+        errno = EINTR;
+        return(NULL);
     }
     waitpid(-1, &status, 0);
     return status;

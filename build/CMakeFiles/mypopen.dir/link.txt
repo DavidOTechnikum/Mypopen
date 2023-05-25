@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmypopen.a CMakeFiles/mypopen.dir/src/mypopen.c.o
+/usr/bin/ranlib libmypopen.a

@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/student/Documents/GitHub/Mypopen/include/mypopen.h
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+sys/wait.h
+-
+string.h
+-
+errno.h
+-
+
+/home/student/Documents/GitHub/Mypopen/test/main.c
+stdio.h
+-
+stdlib.h
+-
+../include/mypopen.h
+/home/student/Documents/GitHub/Mypopen/include/mypopen.h
+

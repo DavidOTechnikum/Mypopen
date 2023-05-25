@@ -1,0 +1,1 @@
+/usr/bin/gcc -g CMakeFiles/mypopen_test.dir/test/main.c.o -o mypopen_test  libmypopen.a 
